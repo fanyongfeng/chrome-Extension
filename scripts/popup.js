@@ -7,6 +7,13 @@ $('#linten-page').off().on('click', function() {
   sendMessage({listenAllPAge: true});
 });
 
+var audio = $('#bgMusic');
+
+$('button[name=stop]').on('click', function() {
+  audio.pause();
+  audio.currentTime = 0;
+});
+
 var sendMessage = function(message) {
   chrome.tabs.query({
     active: true,
@@ -26,12 +33,12 @@ chrome.extension.onRequest.addListener(
         farewell: "收到了找不到的报错信息"
       });
       showErrorMessage(request.message);
-    } else {
-      sendResponse({}); // snub them.
+    }
+    if (request.getStart) {
+      audio.play();
     }
   });
 
   var showErrorMessage = function(message) {
-    debugger
     $('#showErrorMessage').html(message);
   };
